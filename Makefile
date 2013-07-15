@@ -16,3 +16,6 @@ install-apache-persona:
 
 install-git-admin:
 	ansible-playbook -i hosts git-admin/tasks/main.yml
+
+install-wiki:
+	ansible-playbook -i hosts wiki.yml

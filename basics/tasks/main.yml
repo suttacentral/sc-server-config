@@ -4,6 +4,7 @@
   vars_files:
     - ../../secrets.yml
   tasks:
+    - include: hostnames.yml
     - include: timezone.yml
     - include: firewall.yml
     - include: apt.yml

@@ -1,0 +1,21 @@
+---
+- name: Create the wiki group
+  action: group name=wiki
+
+- name: Create the wiki user
+  action: user name=wiki group=wiki shell=/bin/bash
+               home=/home/wiki comment='Wiki generator'
+
+- name: Create wiki's SSH directory
+  action: file path=/home/wiki/.ssh state=directory
+               mode=0700 owner=wiki group=wiki
+
+- name: Copy wiki's SSH private key
+  action: template src=wiki-id_rsa
+               dest=/home/wiki/.ssh/id_rsa
+               mode=0600 owner=wiki group=wiki
+
+- name: Copy wiki's SSH public key
+  action: copy src=wiki-id_rsa.pub
+              dest=/home/wiki/.ssh/id_rsa.pub
+              mode=0644 owner=wiki group=wiki

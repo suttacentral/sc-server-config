@@ -1,0 +1,11 @@
+---
+- name: Set hostname
+  action: copy content=vps dest=/etc/hostname mode=0644
+  register: result
+
+- name: Update hostname
+  action: command /bin/hostname vps
+  when: result.changed
+
+- name: Set /etc/hosts
+  action: template src=hosts dest=/etc/hosts mode=0644

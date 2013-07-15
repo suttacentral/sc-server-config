@@ -4,5 +4,12 @@
   with_items:
     - git
     - ruby
+    - curl
+    - patch
+    - bzip2
+    - openssl
+    - ca-certificates
     - build-essential
     - cmake
+    - autoconf
+    - automake

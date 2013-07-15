@@ -19,8 +19,8 @@
                mode=0644
 
 - name: Create Apache gitweb configuration
-  action: copy src=gitweb-apache.conf
-               dest=/etc/apache2/sites-available/gitweb mode=0644
+  action: template src=gitweb-apache.conf mode=0644
+                   dest=/etc/apache2/sites-available/gitweb
   notify: Restart Apache
 
 - name: Enable Apache gitweb

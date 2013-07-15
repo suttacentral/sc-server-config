@@ -1,0 +1,26 @@
+---
+- name: Install RVM build dependencies for Ruby 1.9.3
+  action: apt pkg={{ item }}
+  with_items:
+    - gawk
+    - libyaml-dev
+    - sqlite3
+    - libgdbm-dev
+    - libncurses5-dev
+    - libtool
+    - bison
+    - libffi-dev
+
+- name: Test to see if RVM is installed
+  action: command /usr/bin/test -d /home/wiki/.rvm
+  register: result
+  ignore_errors: True
+
+- name: Install RVM
+  action: shell sudo -u wiki -H bash -l -c
+                'curl https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer | bash -s stable'
+  when: result|failed
+
+- name: Install Ruby 1.9.3 for wiki
+  action: shell sudo -u wiki -H bash -l -c 'rvm install 1.9.3'
+  when: result|failed

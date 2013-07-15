@@ -1,0 +1,3 @@
+---
+- name: Install Postfix email server and mail utilities
+  action: apt pkg=postfix,mailutils

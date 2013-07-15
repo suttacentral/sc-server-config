@@ -1,0 +1,32 @@
+---
+- name: Install gitolite
+  action: apt pkg=gitolite
+
+- name: Test if gitolite is setup
+  action: command /usr/bin/test -f /home/git/.gitolite.rc
+  register: result
+  ignore_errors: True
+
+- name: Copy repository archive to server
+  action: copy src={{ repository_archive_path }}
+               dest=/home/git/repositories.tar.bz2
+               owner=git group=git mode=0644
+  when: result|failed
+
+- name: Setup gitolite
+  action: script setup-gitolite.sh
+  when: result|failed
+
+- name: Change umask for gitolite
+  action: lineinfile dest=/home/git/.gitolite.rc
+          regexp=REPO_UMASK
+          line='$REPO_UMASK = 0027;'
+
+- name: Add www-data to the git group
+  action: command /usr/sbin/usermod -a -G git www-data
+
+- name: Fix permissions on projects.list
+  action: file path=/home/git/projects.list mode=0640 owner=git group=git
+
+- name: Recursively fix permissions on repositories
+  action: command /bin/chmod g+rx /home/git/repositories

@@ -1,0 +1,8 @@
+---
+- name: Install MySQL database server and client
+  action: apt pkg=mysql-server,mysql-client
+  register: result
+
+- name: Set MySQL root password
+  action: shell mysqladmin -u root password {{mysql_root_password}}
+  when: result.changed

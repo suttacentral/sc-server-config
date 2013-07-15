@@ -1,0 +1,8 @@
+---
+- name: Install Core Packages (git, ruby, development, etc.)
+  action: apt pkg={{ item }}
+  with_items:
+    - git
+    - ruby
+    - build-essential
+    - cmake

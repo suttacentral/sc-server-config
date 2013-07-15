@@ -1,0 +1,16 @@
+---
+- name: Update apt cache and upgrade all packages
+  action: apt update_cache=yes upgrade=full
+
+- name: Install apt unattended-upgrades
+  action: apt pkg=unattended-upgrades
+
+- name: Setup apt unattended-upgrades configuration
+  action: copy src=unattended-upgrades
+               dest=/etc/apt/apt.conf.d/50unattended-upgrades mode=0644
+
+- name: Setup apt perodic configuration
+  action: copy src=periodic dest=/etc/apt/apt.conf.d/10periodic mode=0644
+
+- name: Setup automatic apt cleaning
+  action: copy src=apt-clean dest=/etc/cron.daily/apt-clean mode=0755

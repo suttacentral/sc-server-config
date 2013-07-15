@@ -1,0 +1,9 @@
+---
+- name: See if yajl2 is installed
+  action: command /usr/bin/test -f /usr/local/lib/libyajl.so
+  register: result
+  ignore_errors: True
+
+- name: Install yajl2
+  action: script install-yajl2
+  when: result|failed

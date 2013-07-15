@@ -1,0 +1,12 @@
+#!/bin/sh
+
+cd /root
+rm -rf yajl
+git clone https://github.com/lloyd/yajl.git
+cd yajl
+git checkout 2.0.4
+./configure
+make install
+cd ..
+rm -rf yajl
+ldconfig

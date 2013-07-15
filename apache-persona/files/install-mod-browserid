@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd /root
+rm -rf mod_browserid
+git clone https://github.com/mozilla/mod_browserid.git
+cd mod_browserid
+APXS_PATH=/usr/bin/apxs2 make
+APXS_PATH=/usr/bin/apxs2 make install
+cd ..
+rm -rf mod_browserid

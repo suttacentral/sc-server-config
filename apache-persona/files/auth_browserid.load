@@ -1,0 +1,1 @@
+LoadModule mod_auth_browserid_module /usr/lib/apache2/modules/mod_auth_browserid.so

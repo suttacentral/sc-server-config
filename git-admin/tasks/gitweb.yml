@@ -1,0 +1,29 @@
+---
+- name: Install gitweb
+  action: apt pkg=gitweb,highlight
+
+- name: Setup gitweb.conf
+  action: copy src=gitweb.conf.pl dest=/etc/gitweb.conf mode=0644
+
+- name: Comment out default Apache gitweb configuration
+  action: copy src=gitweb-apache-default.conf
+          dest=/etc/apache2/conf.d/gitweb mode=0644
+  notify: Restart Apache
+
+- name: Create gitweb-login directory
+  action: file path=/etc/apache2/persona/gitweb-login state=directory mode=0755
+
+- name: Create html for Apache Persona
+  action: copy src=gitweb-persona-index.php
+               dest=/etc/apache2/persona/gitweb-login/index.php
+               mode=0644
+
+- name: Create Apache gitweb configuration
+  action: copy src=gitweb-apache.conf
+               dest=/etc/apache2/sites-available/gitweb mode=0644
+  notify: Restart Apache
+
+- name: Enable Apache gitweb
+  action: file src=/etc/apache2/sites-available/gitweb
+               path=/etc/apache2/sites-enabled/gitweb state=link
+  notify: Restart Apache

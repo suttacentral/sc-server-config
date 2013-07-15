@@ -1,0 +1,19 @@
+---
+- name: Set Bugzilla urlbase setting
+  action: >
+    lineinfile
+      dest=/home/bugzilla/bugzilla/data/params
+      regexp="'urlbase' =>"
+      line="           'urlbase' => 'http://{{ bugzilla_hostname }}/',"
+
+- name: Create Bugzilla localconfig
+  action: template src=localconfig.pl
+                   dest=/home/bugzilla/bugzilla/localconfig
+                   mode=0640 owner=bugzilla group=www-data
+  register: localconfig
+
+- name: Run Bugzilla checksetup.pl
+  action: shell sudo -u bugzilla -i bash -l -c
+                'cd /home/bugzilla/bugzilla &&
+                 ./checksetup.pl'
+  when: localconfig.changed

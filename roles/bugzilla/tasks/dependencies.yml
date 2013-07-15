@@ -1,0 +1,15 @@
+---
+- name: Install Bugzilla dependencies
+  action: apt pkg={{ item }}
+  with_items:
+    - bzr
+    - libdatetime-perl
+    - libdatetime-timezone-perl
+    - libdatetime-format-dateparse-perl
+    - libemail-mime-perl
+    - libemail-send-perl
+    - libmath-random-isaac-perl
+    - libtemplate-perl
+    - liburi-perl
+    - libwww-perl
+    - libjson-perl

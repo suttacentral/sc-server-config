@@ -6,3 +6,4 @@ ansible_ssh_user=root
 vps_hostname=vps.suttacentral.local
 git_hostname=git.suttacentral.local
 wiki_hostname=wiki.suttacentral.local
+bugzilla_hostname=bugs.suttacentral.local

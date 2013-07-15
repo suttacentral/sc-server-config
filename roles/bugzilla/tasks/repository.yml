@@ -1,0 +1,40 @@
+---
+- name: Test if Bugzilla database repository is setup
+  action: shell test -f /home/bugzilla/.bugzilla-repository-setup
+  register: repository_setup
+  ignore_errors: True
+
+- name: Checkout the Bugzilla repository
+  action: shell sudo -u bugzilla -i bash -l -c
+                'bzr co -r tag:bugzilla-4.4
+                 bzr://bzr.mozilla.org/bugzilla/4.4
+                 /home/bugzilla/bugzilla'
+  when: repository_setup|failed
+
+- name: Clone the Bugzilla Persona extension
+  action: shell sudo -u bugzilla -i bash -l -c
+                'git clone
+                 https://jingoro@bitbucket.org/suttacentral/bugzilla-persona-extension.git
+                 /home/bugzilla/bugzilla/extensions/Persona'
+  when: repository_setup|failed
+
+- name: Upload the Bugzilla data directory tarball
+  action: copy src=../../../seeds/sc-bugzilla-data.tar.bz2
+               dest=/home/bugzilla/bugzilla-data.tar.bz2
+               mode=0640 owner=bugzilla group=bugzilla
+  when: repository_setup|failed
+
+- name: Extract the Bugzilla data directory tarball
+  action: shell sudo -u bugzilla -i bash -l -c
+                'cd /home/bugzilla/bugzilla &&
+                 tar jxf /home/bugzilla/bugzilla-data.tar.bz2'
+  when: repository_setup|failed
+
+- name: Remove the Bugzilla data directory tarball
+  action: file path=/home/bugzilla/bugzilla-data.tar.bz2 state=absent
+  when: repository_setup|failed
+
+- name: Flag that the Bugzilla repository is setup
+  action: copy content='' dest=/home/bugzilla/.bugzilla-repository-setup
+               mode=0644 owner=bugzilla group=bugzilla
+  when: repository_setup|failed

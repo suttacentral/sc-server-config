@@ -1,0 +1,8 @@
+---
+- name: Create the Bugzilla group
+  action: group name=bugzilla
+
+- name: Create the Bugzilla user
+  action: user name=bugzilla group=bugzilla shell=/bin/bash
+               home=/home/bugzilla comment='Bugzilla user'
+               groups=www-data

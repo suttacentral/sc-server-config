@@ -1,0 +1,7 @@
+---
+- include: dependencies.yml
+- include: user.yml
+- include: database.yml
+- include: repository.yml
+- include: config.yml
+- include: apache.yml

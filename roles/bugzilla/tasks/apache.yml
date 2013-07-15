@@ -1,0 +1,9 @@
+- name: Create Apache Bugzilla configuration
+  action: template src=bugzilla.conf mode=0644
+                   dest=/etc/apache2/sites-available/bugzilla
+  notify: Restart Apache
+
+- name: Enable Apache Bugzilla
+  action: file src=/etc/apache2/sites-available/bugzilla
+               path=/etc/apache2/sites-enabled/bugzilla state=link
+  notify: Restart Apache

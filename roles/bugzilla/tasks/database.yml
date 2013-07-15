@@ -1,0 +1,46 @@
+---
+- name: Create the Bugzilla database user
+  action: mysql_user name=bugzilla
+                     password={{ mysql_bugzilla_password }}
+                     priv=bugzilla.*:ALL
+                     login_user=root
+                     login_password={{ mysql_root_password }}
+
+- name: Create the Bugzilla database
+  action: mysql_db db=bugzilla
+                   encoding=utf8
+                   login_user=root
+                   login_password={{ mysql_root_password }}
+
+- name: Test if Bugzilla database is imported
+  action: shell test -f /home/bugzilla/.bugzilla-db-imported
+  register: db_imported
+  ignore_errors: True
+
+- name: Upload the Bugzilla database dump
+  action: copy src=../../../seeds/sc-bugzilla-db.sql.bz2
+               dest=/home/bugzilla/bugzilla.sql.bz2
+               mode=0640 owner=bugzilla group=bugzilla
+  when: db_imported|failed
+
+- name: Uncompress the Bugzilla database dump
+  action: shell bunzip2 /home/bugzilla/bugzilla.sql.bz2
+  when: db_imported|failed
+
+- name: Import the Bugzilla database dump
+  action: mysql_db db=bugzilla
+                   encoding=utf8
+                   login_user=root
+                   login_password={{ mysql_root_password }}
+                   state=import
+                   target=/home/bugzilla/bugzilla.sql
+  when: db_imported|failed
+
+- name: Remove the Bugzilla database dump
+  action: file path=/home/bugzilla/bugzilla.sql state=absent
+  when: db_imported|failed
+
+- name: Flag that the Bugzilla database is imported
+  action: copy content='' dest=/home/bugzilla/.bugzilla-db-imported
+               mode=0644 owner=bugzilla group=bugzilla
+  when: db_imported|failed

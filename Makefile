@@ -1,12 +1,8 @@
-all: provision install-basics install-apache-persona install-git-admin
-
-dummy:
+all: provision install-basics install-apache-persona install-git-admin \
+	install-wiki install-bugzilla
 
 provision: dummy
 	vagrant up
-
-test-provision:
-	ansible -i hosts -m shell -a 'uname -a' virtualbox
 
 install-basics:
 	ansible-playbook -i hosts basics/tasks/main.yml
@@ -19,3 +15,11 @@ install-git-admin:
 
 install-wiki:
 	ansible-playbook -i hosts wiki.yml
+
+install-bugzilla:
+	ansible-playbook -i hosts bugzilla.yml
+
+test-provision:
+	ansible -i hosts -m shell -a 'uname -a' virtualbox
+
+dummy:

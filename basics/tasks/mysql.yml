@@ -1,8 +1,15 @@
 ---
-- name: Install MySQL database server and client
-  action: apt pkg=mysql-server,mysql-client
+- name: Install MySQL database server and related packages
+  action: apt pkg=mysql-server
   register: result
 
 - name: Set MySQL root password
   action: shell mysqladmin -u root password {{mysql_root_password}}
   when: result.changed
+
+- name: Install MySQL utilities and related package
+  action: apt pkg={{ item }}
+  with_items:
+    - mysql-client
+    - python-mysqldb # This is needed by ansible mysql_* modules
+  register: result

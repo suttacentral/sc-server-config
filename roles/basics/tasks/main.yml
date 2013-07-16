@@ -1,0 +1,10 @@
+---
+- include: hostnames.yml
+- include: timezone.yml
+- include: firewall.yml
+- include: apt.yml
+- include: core-packages.yml
+- include: postfix.yml
+- include: apache.yml
+- include: mysql.yml
+- include: php.yml

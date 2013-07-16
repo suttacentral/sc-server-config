@@ -2,7 +2,7 @@
 - hosts: all
   user: root
   vars:
-    repository_archive_path: ../../starter/repositories-20130714.tar.bz2
+    repository_archive_path: ../../seeds/sc-git-repositories.tar.bz2
   vars_files:
     - ../../secrets.yml
 

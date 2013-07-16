@@ -3,4 +3,4 @@
   action: apt pkg=apache2,apache2-mpm-prefork,apache2-utils
 
 - name: Enable Apache over firewall
-  action: command /usr/sbin/ufw allow 'Apache Full'
+  action: shell ufw allow 'Apache Full'

@@ -1,7 +1,7 @@
 ---
-- name: Set /etc/timezone to UTC
+- name: Set timezone to UTC
   action: copy src=timezone dest=/etc/timezone mode=0644
-  register: result
+  register: timezone
 
 - name: Restart dependent time services
   action: service name={{ item }} state=restarted
@@ -10,4 +10,4 @@
     - cron
     - ssh
     - ntp
-  when: result.changed
+  when: timezone.changed

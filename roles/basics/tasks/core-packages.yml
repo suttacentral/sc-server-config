@@ -1,5 +1,5 @@
 ---
-- name: Install Core Packages (git, ruby, development, etc.)
+- name: Install Core Packages
   action: apt pkg={{ item }}
   with_items:
     - git

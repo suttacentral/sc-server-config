@@ -3,7 +3,7 @@
   action: apt pkg=ufw
 
 - name: Enable SSH over firewall
-  action: command /usr/sbin/ufw allow OpenSSH
+  action: shell ufw allow OpenSSH
 
 - name: Enable ufw firewall
-  action: command /usr/sbin/ufw --force enable
+  action: shell ufw --force enable

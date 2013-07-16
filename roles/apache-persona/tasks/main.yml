@@ -1,0 +1,4 @@
+---
+- include: yajl2.yml
+- include: mod-browserid.yml
+- include: persona-config.yml

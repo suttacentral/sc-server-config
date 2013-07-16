@@ -12,7 +12,7 @@ install-basics:
 	ansible-playbook -i hosts 01-basics.yml
 
 install-apache-persona:
-	ansible-playbook -i hosts apache-persona/tasks/main.yml
+	ansible-playbook -i hosts 02-apache-persona.yml
 
 install-git-admin:
 	ansible-playbook -i hosts 03-git-admin.yml

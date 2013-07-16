@@ -1,6 +1,0 @@
----
-- name: Create Apache Persona configuration directory
-  action: file path=/etc/apache2/persona state=directory mode=0755 owner=root
-
-- name: Create Apache Persona user file
-  action: template src=valid-users dest=/etc/apache2/persona/valid-users mode=0644 owner=root

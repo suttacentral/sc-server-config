@@ -1,9 +1,0 @@
----
-- hosts: all
-  user: root
-  vars_files:
-    - variables.yml
-  tasks:
-
-    - name: debug
-      debug: msg="testing {{ git_repository_archive_path }}"

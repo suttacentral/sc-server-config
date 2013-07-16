@@ -13,3 +13,5 @@
     - cmake
     - autoconf
     - automake
+    - python-mysqldb # Needed by ansible mysql_* modules
+    - python-software-properties # Needed by ansible apt_repository¶

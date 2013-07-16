@@ -1,0 +1,51 @@
+- name: Create the {{ username }} group
+  action: group name={{ username }}
+
+- name: Create the {{ username }} username
+  action: user name={{ username }} group={{ username }} shell=/bin/bash
+               home=/home/{{ username }} comment='{{ username }} runner'
+
+- name: Create {{ username }}'s SSH directory
+  action: file path=/home/{{ username }}/.ssh state=directory
+               mode=0700 owner={{ username }} group={{ username }}
+
+- name: Create {{ username }}'s SSH private key
+  action: copy content='{{ ssh_private_key }}'
+               dest=/home/{{ username }}/.ssh/id_rsa
+               mode=0600 owner={{ username }} group={{ username }}
+
+- name: Create {{ username }}'s SSH public key
+  action: copy src={{ username }}-id_rsa.pub
+              dest=/home/{{ username }}/.ssh/id_rsa.pub
+              mode=0644 owner={{ username }} group={{ username }}
+
+- name: Assign git host as a SSH known host
+  known_hosts: host={{ git_hostname }} state=present
+               file=/home/{{ username }}/.ssh/known_hosts
+               user={{ username }} group={{ username }}
+
+- name: Create {{ username }}'s virtualenvs directory
+  action: file path=/home/{{ username }}/.virtualenvs state=directory
+               mode=0755 owner={{ username }} group={{ username }}
+
+- name: Set WORKON_HOME for {{ username }}
+  action: lineinfile dest=/home/{{ username }}/.profile
+          regexp=WORKON_HOME
+          insertafter=EOF
+          line='export WORKON_HOME=\$HOME/.virtualenvs'
+
+- name: Setup virtualenvwrapper for {{ username }}
+  action: lineinfile dest=/home/{{ username }}/.profile
+          regexp=virtualenvwrapper\.sh
+          insertafter=EOF
+          line='source `which virtualenvwrapper.sh`'
+
+- name: Test to see if the virtualenv is setup for {{ username }}
+  action: shell test -d /home/{{ username }}/.virtualenvs/suttacentral
+  register: virtualenv_setup
+  ignore_errors: True
+
+- name: Create suttacentral virtualenv for {{ username }}
+  action: shell sudo -u {{ username }} -i bash -l -c
+                'mkvirtualenv -p `which python3.3` suttacentral'
+  when: virtualenv_setup|failed

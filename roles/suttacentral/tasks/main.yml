@@ -1,0 +1,17 @@
+---
+- include: dependencies.yml
+- include: user.yml username=sc-staging
+                    ssh_private_key={{ sc_staging_private_ssh_key }}
+- include: user.yml username=sc-production
+                    ssh_private_key={{ sc_production_private_ssh_key }}
+- include: database.yml username=sc-staging
+                        database=sc_staging
+                        database_password={{ sc_staging_mysql_password }}
+- include: database.yml username=sc-production
+                        database=sc_production
+                        database_password={{ sc_production_mysql_password }}
+- include: repository.yml username=sc-staging
+- include: repository.yml username=sc-production
+- include: apache.yml
+- include: daemon.yml username=sc-staging
+- include: daemon.yml username=sc-production

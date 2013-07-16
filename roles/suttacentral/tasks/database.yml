@@ -1,0 +1,46 @@
+---
+- name: Create the {{ database }} database user for {{ username }}
+  action: mysql_user name={{ database }}
+                     password={{ database_password }}
+                     priv={{ database }}.*:ALL
+                     login_user=root
+                     login_password={{ mysql_root_password }}
+
+- name: Create the {{ database }} database for {{ username }}
+  action: mysql_db db={{ database }}
+                   encoding=utf8
+                   login_user=root
+                   login_password={{ mysql_root_password }}
+
+- name: Test if {{ username }}'s SuttaCentral database is imported
+  action: shell test -f /home/{{ username }}/.sc-db-imported
+  register: db_imported
+  ignore_errors: True
+
+- name: Upload the SuttaCentral database dump for {{ username }}
+  action: copy src=../../../seeds/sc-production-db.sql.bz2
+               dest=/home/{{ username }}/sc.sql.bz2
+               mode=0640 owner={{ username }} group={{ username }}
+  when: db_imported|failed
+
+- name: Uncompress the SuttaCentral database dump for {{ username }}
+  action: shell bunzip2 /home/{{ username }}/sc.sql.bz2
+  when: db_imported|failed
+
+- name: Import the SuttaCentral database dump for {{ username }}
+  action: mysql_db db={{ database }}
+                   encoding=utf8
+                   login_user=root
+                   login_password={{ mysql_root_password }}
+                   state=import
+                   target=/home/{{ username }}/sc.sql
+  when: db_imported|failed
+
+- name: Remove the SuttaCentral database dump for {{ username }}
+  action: file path=/home/{{ username }}/sc.sql state=absent
+  when: db_imported|failed
+
+- name: Flag that the SuttaCentral database is imported for {{ username }}
+  action: copy content='' dest=/home/{{ username }}/.sc-db-imported
+               mode=0644 owner={{ username }} group={{ username }}
+  when: db_imported|failed

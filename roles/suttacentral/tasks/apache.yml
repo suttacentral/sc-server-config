@@ -1,0 +1,27 @@
+---
+- name: Create SuttaCentral Apache site configuration
+  action: template src={{ item }}-apache.conf mode=0644
+                   dest=/etc/apache2/sites-available/{{ item }}
+  with_items:
+    - sc-staging
+    - sc-production
+  notify: Restart Apache
+
+- name: Enable SuttaCentral sites on Apache
+  action: shell a2ensite {{ item }}
+  with_items:
+    - sc-staging
+    - sc-production
+  notify: Restart Apache
+
+- name: Enable Apache modules needed for SuttaCentral
+  action: shell a2enmod {{ item }}
+  with_items:
+    deflate
+    expires
+    headers
+    mime
+    proxy
+    proxy_http
+    setenvif
+  notify: Restart Apache

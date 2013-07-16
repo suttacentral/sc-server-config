@@ -1,0 +1,7 @@
+---
+- name: Add dependencies for SuttaCentral
+  action: apt pkg={{ item }}
+  with_items:
+    - supervisor
+    - libmysqlclient-dev
+    - zlib1g-dev

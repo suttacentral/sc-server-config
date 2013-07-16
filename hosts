@@ -7,3 +7,5 @@ vps_hostname=vps.suttacentral.local
 git_hostname=git.suttacentral.local
 wiki_hostname=wiki.suttacentral.local
 bugzilla_hostname=bugs.suttacentral.local
+sc_staging_hostname=staging.suttacentral.local
+sc_production_hostname=suttacentral.local

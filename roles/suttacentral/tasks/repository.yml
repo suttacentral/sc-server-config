@@ -1,0 +1,43 @@
+---
+- name: Test if {{ username }}'s SuttaCentral repository is setup
+  action: shell test -f /home/{{ username }}/.sc-repository-setup
+  register: repository_setup
+  ignore_errors: True
+
+- name: Clone the SuttaCentral code repository for {{ username }}
+  action: shell sudo -u {{ username }} -i bash -l -c
+                'git clone git@{{ git_hostname }}:suttacentral.git
+                 /home/{{ username }}/suttacentral'
+  when: repository_setup|failed
+
+- name: Clone the SuttaCentral text repository for {{ username }}
+  action: shell sudo -u {{ username }} -i bash -l -c
+                'git clone git@{{ git_hostname }}:suttacentral-text.git
+                 /home/{{ username }}/suttacentral/text'
+  when: repository_setup|failed
+
+- name: Create {{ username }}'s SuttaCentral local.conf
+  action: template src={{ username }}-local.conf
+                   dest=/home/{{ username }}/suttacentral/local.conf
+                   mode=0640 owner={{ username }} group={{ username }}
+
+- name: Create {{ username }}'s SuttaCentral daemonize
+  action: template src={{ username }}-daemonize.py
+                   dest=/home/{{ username }}/suttacentral/daemonize
+                   mode=0755 owner={{ username }} group={{ username }}
+
+- name: Finalize SuttaCentral repository for {{ username }}
+  action: shell sudo -u {{ username }} -i bash -l -c
+                'workon suttacentral &&
+                 cd /home/{{ username }}/suttacentral &&
+                 pip install -r requirements.txt &&
+                 make reset-db &&
+                 make build-assets &&
+                 make build-dict &&
+                 make build-search-indexes'
+  when: repository_setup|failed
+
+- name: Flag that the SuttaCentral repository for {{ username }} is setup
+  action: copy content='' dest=/home/{{ username }}/.sc-repository-setup
+               mode=0644 owner={{ username }} group={{ username }}
+  when: repository_setup|failed

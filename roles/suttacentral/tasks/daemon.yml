@@ -1,0 +1,5 @@
+---
+- name: Create SuttaCentral supervisor configuration for {{ username }}
+  action: template src={{ username }}-supervisor.conf mode=0644
+                   dest=/etc/supervisor/conf.d/{{ username }}.conf
+  notify: Restart Supervisor

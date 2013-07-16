@@ -4,7 +4,8 @@ all: provision \
 	install-git-admin \
 	install-wiki \
 	install-bugzilla \
-	install-newrelic
+	install-newrelic \
+	install-suttacentral
 
 provision: dummy
 	vagrant up
@@ -26,6 +27,9 @@ install-bugzilla:
 
 install-newrelic:
 	ansible-playbook -i hosts 06-newrelic.yml
+
+install-suttacentral:
+	ansible-playbook -i hosts 07-suttacentral.yml
 
 test-provision:
 	ansible -i hosts -m shell -a 'uname -a' virtualbox

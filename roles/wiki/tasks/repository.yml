@@ -1,24 +1,18 @@
 ---
-- name: Install Ruby gollum dependencies
-  action: apt pkg={{ item }}
-  with_items:
-    - libxml2-dev
-    - libxslt1-dev
-
-- name: Assign git host as a known host
+- name: Assign git host as a SSH known host
   known_hosts: host={{ git_hostname }} state=present
                file=/home/wiki/.ssh/known_hosts
                user=wiki group=wiki
 
 - name: Test to see if the wiki repository has been cloned
-  action: command /usr/bin/test -d /home/wiki/wiki
-  register: result
+  action: shell test -d /home/wiki/wiki
+  register: repository_cloned
   ignore_errors: True
 
 - name: Git clone wiki repository
   action: shell sudo -u wiki -i git clone
                 git@{{ git_hostname }}:wiki.git /home/wiki/wiki
-  when: result|failed
+  when: repository_cloned|failed
 
 - name: Create wiki repository update.sh
   action: copy src=update.sh
@@ -26,30 +20,15 @@
                mode=0755 owner=wiki group=wiki
 
 - name: Test to see if the wiki site has been built
-  action: command /usr/bin/test -d /home/wiki/wiki/_site
-  register: result
+  action: shell test -d /home/wiki/wiki/_site
+  register: wiki_site_built
   ignore_errors: True
 
 - name: Build wiki site
   action: shell sudo -u wiki -i /home/wiki/update.sh
-  when: result|failed
+  when: wiki_site_built|failed
 
 - name: Create wiki repository post-receive hook
   action: copy src=post-receive.sh
                dest=/home/git/repositories/wiki.git/hooks/post-receive
                mode=0750 owner=git group=git
-
-- name: Allow wiki user to sudo to git
-  action: >
-    lineinfile dest=/etc/sudoers regexp=^ insertafter=EOF
-    line='git ALL = (wiki) NOPASSWD: /home/wiki/update.sh'
-
-- name: Create wiki site configuration for Apache
-  action: template src=wiki.conf mode=0644
-                   dest=/etc/apache2/sites-available/wiki
-  notify: Restart Apache
-
-- name: Enable wiki site for Apache
-  action: file src=/etc/apache2/sites-available/wiki
-               path=/etc/apache2/sites-enabled/wiki state=link
-  notify: Restart Apache

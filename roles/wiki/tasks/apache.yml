@@ -1,0 +1,10 @@
+---
+- name: Create wiki site configuration for Apache
+  action: template src=wiki.conf mode=0644
+                   dest=/etc/apache2/sites-available/wiki
+  notify: Restart Apache
+
+- name: Enable wiki site for Apache
+  action: file src=/etc/apache2/sites-available/wiki
+               path=/etc/apache2/sites-enabled/wiki state=link
+  notify: Restart Apache

@@ -3,7 +3,8 @@ all: provision \
 	install-apache-persona \
 	install-git-admin \
 	install-wiki \
-	install-bugzilla
+	install-bugzilla \
+	install-newrelic
 
 provision: dummy
 	vagrant up
@@ -22,6 +23,9 @@ install-wiki:
 
 install-bugzilla:
 	ansible-playbook -i hosts 05-bugzilla.yml
+
+install-newrelic:
+	ansible-playbook -i hosts 06-newrelic.yml
 
 test-provision:
 	ansible -i hosts -m shell -a 'uname -a' virtualbox

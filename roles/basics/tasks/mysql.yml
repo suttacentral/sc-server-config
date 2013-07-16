@@ -1,5 +1,5 @@
 ---
-- name: Install MySQL database server and related packages
+- name: Install MySQL database server
   action: apt pkg=mysql-server
   register: mysql_server
 

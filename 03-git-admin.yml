@@ -5,4 +5,4 @@
     - variables.yml
     - secrets.yml
   roles:
-    - wiki
+    - git-admin

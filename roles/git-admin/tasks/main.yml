@@ -1,0 +1,4 @@
+---
+- include: user.yml
+- include: gitolite.yml
+- include: gitweb.yml

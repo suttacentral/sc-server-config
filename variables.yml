@@ -1,0 +1,4 @@
+---
+base_dir: $PIPE(pwd)
+seeds_dir: "{{ base_dir }}/seeds"
+git_repository_archive_path: seeds/sc-git-repositories.tar.bz2

@@ -1,0 +1,28 @@
+---
+- name: Install Gitolite
+  action: apt pkg=gitolite
+
+- name: Test if Gitolite is setup
+  action: shell test -f /home/git/.gitolite-setup
+  register: gitolite_setup
+  ignore_errors: True
+
+- name: Copy repository archive to server
+  action: copy src={{ git_repository_archive_path }}
+               dest=/home/git/repositories.tar.bz2
+               owner=git group=git mode=0644
+  when: gitolite_setup|failed
+
+- name: Setup gitolite
+  action: script setup-gitolite.sh
+  when: gitolite_setup|failed
+
+- name: Flag that Gitolite is setup
+  action: copy content='' dest=/home/git/.gitolite-setup
+               mode=0644 owner=git group=git
+  when: gitolite_setup|failed
+
+- name: Change umask for Gitolite
+  action: lineinfile dest=/home/git/.gitolite.rc
+          regexp=REPO_UMASK
+          line='$REPO_UMASK = 0027;'

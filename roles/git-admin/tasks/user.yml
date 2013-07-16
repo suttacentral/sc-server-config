@@ -1,0 +1,11 @@
+---
+- name: Create the git group
+  action: group name=git
+
+- name: Create the git user
+  action: user name=git group=git shell=/bin/bash
+               home=/home/git comment='Git version control'
+
+- name: Add the www-data user to the git group
+  action: shell usermod -a -G git www-data
+

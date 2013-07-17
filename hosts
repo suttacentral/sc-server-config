@@ -3,10 +3,10 @@ vagrant-vps ansible_ssh_host=192.168.33.10
 
 [vagrant:vars]
 ansible_ssh_user=root
-vps_hostname=vps.suttacentral.local
-git_hostname=git.suttacentral.local
-wiki_hostname=wiki.suttacentral.local
-bugzilla_hostname=bugs.suttacentral.local
-sc_staging_hostname=staging.suttacentral.local
-sc_production_hostname=suttacentral.local
-phpmyadmin_hostname=phpmyadmin.suttacentral.local
+vps_hostname=vps.sc.local
+git_hostname=git.sc.local
+wiki_hostname=wiki.sc.local
+bugzilla_hostname=bugs.sc.local
+sc_staging_hostname=staging.sc.local
+sc_production_hostname=sc.local
+phpmyadmin_hostname=phpmyadmin.sc.local

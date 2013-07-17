@@ -31,7 +31,6 @@
                 'workon suttacentral &&
                  cd /home/{{ username }}/suttacentral &&
                  pip install -r requirements.txt &&
-                 make reset-db &&
                  make build-assets &&
                  make build-dict &&
                  make build-search-indexes'

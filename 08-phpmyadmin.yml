@@ -1,0 +1,8 @@
+---
+- hosts: all
+  user: root
+  vars_files:
+    - variables.yml
+    - secrets.yml
+  roles:
+    - phpmyadmin

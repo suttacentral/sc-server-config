@@ -5,7 +5,8 @@ all: provision \
 	install-wiki \
 	install-bugzilla \
 	install-newrelic \
-	install-suttacentral
+	install-suttacentral \
+	install-phpmyadmin
 
 provision: dummy
 	vagrant up
@@ -30,6 +31,9 @@ install-newrelic:
 
 install-suttacentral:
 	ansible-playbook -i hosts 07-suttacentral.yml
+
+install-phpmyadmin:
+	ansible-playbook -i hosts 08-phpmyadmin.yml
 
 test-provision:
 	ansible -i hosts -m shell -a 'uname -a' virtualbox

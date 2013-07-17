@@ -3,8 +3,9 @@
 127.0.0.1 {{ git_hostname }}
 127.0.0.1 {{ wiki_hostname }}
 127.0.0.1 {{ bugzilla_hostname }}
-127.0.0.1 {{ sc_staging }}
-127.0.0.1 {{ sc_production }}
+127.0.0.1 {{ sc_staging_hostname }}
+127.0.0.1 {{ sc_production_hostname }}
+127.0.0.1 {{ phpmyadmin_hostname }}
 
 # The following lines are desirable for IPv6 capable hosts
 ::1     ip6-localhost ip6-loopback

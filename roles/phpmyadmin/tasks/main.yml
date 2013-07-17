@@ -1,0 +1,49 @@
+---
+- name: Install phpMyAdmin
+  action: apt pkg=phpmyadmin
+
+- name: Empty out default Apache configuration installed by package
+  action: copy content='' mode=0644
+               dest=/etc/apache2/conf.d/phpmyadmin.conf
+  register: result
+
+- name: Restart Apache after installing phpMyAdmin
+  action: service name=apache2 state=restarted
+  when: result.changed
+
+- name: Create the sc_admin database user for phpMyAdmin
+  action: mysql_user name=sc_admin
+                     password={{ sc_admin_mysql_password }}
+                     priv=sc_production.*:SELECT,INSERT,UPDATE,DELETE
+                     login_user=root
+                     login_password={{ mysql_root_password }}
+
+- name: Create Persona Apache directory for phpMyAdmin
+  action: file path=/etc/apache2/persona/phpmyadmin-login
+               state=directory
+
+- name: Create Persona index.php for phpMyAdmin
+  action: template src=phpmyadmin-persona-index.php
+                   dest=/etc/apache2/persona/phpmyadmin-login/index.php
+                   mode=0644
+
+- name: Create configuration for phpMyAdmin
+  action: template src=phpmyadmin-config.inc.php
+                   dest=/etc/phpmyadmin/config.inc.php
+                   mode=0644
+
+- name: Create database configuration for phpMyAdmin
+  action: template src=phpmyadmin-config-db.php
+                   dest=/etc/phpmyadmin/config-db.php
+                   mode=0640 owner=root group=www-data
+
+- name: Create phpMyAdmin site configuration for Apache
+  action: template src=phpmyadmin-apache.conf
+                   dest=/etc/apache2/sites-available/phpmyadmin
+                   mode=0644
+  notify: Restart Apache
+
+- name: Enable phpMyAdmin site for Apache
+  action: file src=/etc/apache2/sites-available/phpmyadmin
+               path=/etc/apache2/sites-enabled/phpmyadmin state=link
+  notify: Restart Apache

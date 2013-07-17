@@ -9,3 +9,4 @@ wiki_hostname=wiki.suttacentral.local
 bugzilla_hostname=bugs.suttacentral.local
 sc_staging_hostname=staging.suttacentral.local
 sc_production_hostname=suttacentral.local
+phpmyadmin_hostname=phpmyadmin.suttacentral.local

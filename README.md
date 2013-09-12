@@ -6,7 +6,14 @@ Prerequisites
 
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - [Vagrant](http://downloads.vagrantup.com/)
-- [Ansible](http://www.ansibleworks.com/docs/gettingstarted.html)
+- [Virtualenv and Virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/en/latest/install.html)
+
+1st Time Setup
+--------------
+
+    git clone git@github.com:suttacentral/sc-server-config.git
+    cd sc-server-config
+    mkvirtualenv sc-server-config -p `which python2.7` -r requirements.txt
 
 Running Locally
 ---------------

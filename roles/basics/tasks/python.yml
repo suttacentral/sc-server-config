@@ -19,8 +19,11 @@
     - python3.3
     - python3.3-dev
 
+- name: Install pip
+  action: easy_install name=pip
+
 - name: Install virtualenv
-  action: easy_install name=virtualenv
+  action: pip name=virtualenvwrapper
 
 - name: Install virtualenvwrapper
-  action: easy_install name=virtualenvwrapper
+  action: pip name=virtualenvwrapper
